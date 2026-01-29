@@ -1,17 +1,5 @@
 const express = require('express')
-const app = express ()
-
-app.get ('/', (req, res) => {
-    res.render ('home.ejs', {restaurant: RESTAURANT})
-})
-
-app.get('/menu', (req, res) => {
-  res.render('menu.ejs', {
-    menu: RESTAURANT.menu
-  });
-});
-
-//------------------------------------------
+const app = express()
 
 const RESTAURANT = {
   name: 'The Green Byte Bistro',
@@ -62,8 +50,27 @@ const RESTAURANT = {
   ]
 }
 
+app.get('/', (req, res) => {
+  res.render('home.ejs', { restaurant: RESTAURANT })
+})
 
-app.listen (3000)
+app.get('/menu', (req, res) => {
+  res.render('menu.ejs', {
+    menu: RESTAURANT.menu
+  })
+})
 
+app.get('/menu/:category', (req, res) => {
+  const category = req.params.category
 
+  const menuItems = RESTAURANT.menu.filter((item) => item.category === category)
 
+  const capCategory = category.charAt(0).toUpperCase() + category.slice(1)
+
+  res.render('category.ejs', {
+    category: capCategory,
+    menuItems: menuItems
+  })
+})
+
+app.listen(3000)
